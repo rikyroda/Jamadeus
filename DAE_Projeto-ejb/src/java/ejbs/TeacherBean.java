@@ -1,6 +1,7 @@
 package ejbs;
 
 import dtos.TeacherDTO;
+import entities.Student;
 import entities.Subject;
 import entities.Teacher;
 import entities.User;
@@ -60,6 +61,26 @@ public class TeacherBean {
         try {
             List<Teacher> teachers = (List<Teacher>) em.createNamedQuery("getAllTeachers").getResultList();
             return teachersToDTOs(teachers);
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    public void remove(String username) throws EntityDoesNotExistsException {
+        try {
+            Teacher teacher = em.find(Teacher.class, username);
+            if (teacher == null) {
+                throw new EntityDoesNotExistsException("There is no student with that username.");
+            }
+            
+            for (Subject subject : teacher.getSubjects()) {
+                subject.removeTeacher(teacher);
+            }
+            
+            em.remove(teacher);
+        
+        } catch (EntityDoesNotExistsException e) {
+            throw e;
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }

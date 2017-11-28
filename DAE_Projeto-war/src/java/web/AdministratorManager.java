@@ -3,9 +3,11 @@ package web;
 import dtos.CourseDTO;
 import dtos.StudentDTO;
 import dtos.SubjectDTO;
+import dtos.TeacherDTO;
 import ejbs.CourseBean;
 import ejbs.StudentBean;
 import ejbs.SubjectBean;
+import ejbs.TeacherBean;
 import exceptions.EntityAlreadyExistsException;
 import exceptions.EntityDoesNotExistsException;
 import exceptions.MyConstraintViolationException;
@@ -28,6 +30,8 @@ public class AdministratorManager {
     @EJB
     private StudentBean studentBean;
     @EJB
+    private TeacherBean teacherBean;
+    @EJB
     private CourseBean courseBean;
     @EJB
     private SubjectBean subjectBean;
@@ -39,6 +43,10 @@ public class AdministratorManager {
     private SubjectDTO newSubject;
     private SubjectDTO currentSubject;
     private UIComponent component;
+    
+    // Teacher
+    private TeacherDTO newTeacher;
+    private TeacherDTO currentTeacher;
 
     public AdministratorManager() {
         newStudent = new StudentDTO();
@@ -251,6 +259,65 @@ public class AdministratorManager {
             FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
         }
     }
+    
+    public String createTeacher() {
+        try {
+            studentBean.create(
+                    newStudent.getUsername(),
+                    newStudent.getPassword(),
+                    newStudent.getName(),
+                    newStudent.getEmail(),
+                    newStudent.getCourseCode());
+            newStudent.reset();
+        } catch (EntityAlreadyExistsException | EntityDoesNotExistsException | MyConstraintViolationException e) {
+            FacesExceptionHandler.handleException(e, e.getMessage(), component, logger);
+            return null;
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+            return null;
+        }
+
+        return "admin_teachers_list?faces-redirect=true";
+    }
+
+    public List<TeacherDTO> getAllTeachers() {
+        try {
+            return teacherBean.getAllTeachers();
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
+            return null;
+        }
+    }
+
+    public String updateTeacher() {
+        try {
+            teacherBean.update(
+                    currentTeacher.getUsername(),
+                    currentTeacher.getName(),
+                    currentTeacher.getEmail(),
+                    currentTeacher.getOffice());
+
+        } catch (EntityDoesNotExistsException | MyConstraintViolationException e) {
+            FacesExceptionHandler.handleException(e, e.getMessage(), logger);
+            return null;
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
+            return null;
+        }
+        return "admin_teachers_list?faces-redirect=true";
+    }
+
+    public void removeTeacher(ActionEvent event) {
+        try {
+            UIParameter param = (UIParameter) event.getComponent().findComponent("teacherUsername");
+            String id = param.getValue().toString();
+            teacherBean.remove(id);
+        } catch (EntityDoesNotExistsException e) {
+            FacesExceptionHandler.handleException(e, e.getMessage(), logger);
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
+        }
+    }
 
     /////////////// GETTERS & SETTERS /////////////////    
     public StudentDTO getNewStudent() {
@@ -307,6 +374,22 @@ public class AdministratorManager {
 
     public void setComponent(UIComponent component) {
         this.component = component;
+    }
+
+    public TeacherDTO getNewTeacher() {
+        return newTeacher;
+    }
+
+    public void setNewTeacher(TeacherDTO newTeacher) {
+        this.newTeacher = newTeacher;
+    }
+
+    public TeacherDTO getCurrentTeacher() {
+        return currentTeacher;
+    }
+
+    public void setCurrentTeacher(TeacherDTO currentTeacher) {
+        this.currentTeacher = currentTeacher;
     }
 
     ///////////// VALIDATORS ////////////////////////
