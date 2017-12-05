@@ -27,12 +27,9 @@ import javax.validation.constraints.NotNull;
  * @author luisvf7
  */
 @Entity
-@Table(name = "INSTITUTIONS",
-uniqueConstraints =
-@UniqueConstraint(columnNames = {"CODE"}))
 @NamedQueries({
     @NamedQuery(name = "getAllInstitutions",
-    query = "SELECT i FROM Course i ORDER BY i.name")})
+    query = "SELECT i FROM Institution i")})
 public class Institution implements Serializable {
     
     @Id

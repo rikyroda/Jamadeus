@@ -5,13 +5,18 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQuery(name = "getAllTeachers", query = "SELECT t FROM Teacher t ORDER BY t.name")
 public class Teacher extends User implements Serializable {
-
+    
+    @ManyToOne
+    private Institution institution;
+    
     private String office;    
+    
     @ManyToMany(mappedBy = "teachers")
     private List<Subject> subjects;
 
@@ -19,9 +24,10 @@ public class Teacher extends User implements Serializable {
         subjects = new LinkedList<>();
     }
 
-    public Teacher(String username, String password, String name, String email, String office) {
+    public Teacher(String username, String password, String name, String email, String office, Institution institution) {
         super(username, password, name, email);
         this.office = office;
+        this.institution = institution;
         subjects = new LinkedList<>();
     }
 

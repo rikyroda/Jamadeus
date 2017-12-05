@@ -1,6 +1,7 @@
 package ejbs;
 
 import dtos.TeacherDTO;
+import entities.Institution;
 import entities.Student;
 import entities.Subject;
 import entities.Teacher;
@@ -23,13 +24,14 @@ public class TeacherBean {
     @PersistenceContext
     private EntityManager em;
 
-    public void create(String username, String password, String name, String email, String office)
+    public void create(String username, String password, String name, String email, String office, int institution_code)
             throws EntityAlreadyExistsException {
         try {
+            Institution inst = em.find(Institution.class, institution_code);
             if (em.find(User.class, username) != null) {
                 throw new EntityAlreadyExistsException("A user with that username already exists.");
             }
-            em.persist(new Teacher(username, password, name, email, office));
+            em.persist(new Teacher(username, password, name, email, office,inst));
         } catch (EntityAlreadyExistsException e) {
             throw e;
         } catch (Exception e) {

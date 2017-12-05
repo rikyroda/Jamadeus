@@ -22,7 +22,8 @@ public class ConfigBean {
     private SubjectBean subjectBean;
     @EJB
     private TeacherBean teacherBean;
-
+    @EJB
+    private InstitutionBean institutionBean;
     @PostConstruct
     public void populateBD() {
 
@@ -52,7 +53,11 @@ public class ConfigBean {
             subjectBean.create(5, "ComputProg", 2, 1, "2015/2016");
             subjectBean.create(6, "ComplProg", 2, 1, "2015/2016");
             subjectBean.create(7, "PA", 2, 2, "2015/2016");
-
+            
+            institutionBean.create(0, "IPLeiria");
+            institutionBean.create(4, "IST");
+            institutionBean.create(5, "ISEG");
+            
             studentBean.enrollStudent("1111111", 1);
             studentBean.enrollStudent("1111111", 2);
             studentBean.enrollStudent("2222222", 3);
@@ -63,9 +68,9 @@ public class ConfigBean {
             studentBean.enrollStudent("4444444", 6);
             studentBean.enrollStudent("4444444", 7);
 
-            teacherBean.create("t1", "t1", "t1", "t1@ipleiria.pt", "O1");
-            teacherBean.create("t2", "t2", "t2", "t2@ipleiria.pt", "O2");
-            teacherBean.create("t3", "t3", "t3", "t3@ipleiria.pt", "O3");
+            teacherBean.create("t1", "t1", "t1", "t1@ipleiria.pt", "O1",0);
+            teacherBean.create("t2", "t2", "t2", "t2@ipleiria.pt", "O2",0);
+            teacherBean.create("t3", "t3", "t3", "t3@ipleiria.pt", "O3",4);
 
             administratorBean.create("a1", "a1", "a1", "a1@ipleiria.pt");
             administratorBean.create("a2", "a2", "a2", "a2@ipleiria.pt");
