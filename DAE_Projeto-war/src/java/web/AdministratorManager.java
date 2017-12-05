@@ -1,10 +1,12 @@
 package web;
 
 import dtos.CourseDTO;
+import dtos.InstitutionDTO;
 import dtos.StudentDTO;
 import dtos.SubjectDTO;
 import dtos.TeacherDTO;
 import ejbs.CourseBean;
+import ejbs.InstitutionBean;
 import ejbs.StudentBean;
 import ejbs.SubjectBean;
 import ejbs.TeacherBean;
@@ -12,6 +14,7 @@ import exceptions.EntityAlreadyExistsException;
 import exceptions.EntityDoesNotExistsException;
 import exceptions.MyConstraintViolationException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -35,6 +38,10 @@ public class AdministratorManager {
     private CourseBean courseBean;
     @EJB
     private SubjectBean subjectBean;
+    
+    @EJB
+    private InstitutionBean institutionBean;
+    
     private static final Logger logger = Logger.getLogger("web.AdministratorManager");
     private StudentDTO newStudent;
     private StudentDTO currentStudent;
@@ -47,11 +54,16 @@ public class AdministratorManager {
     // Teacher
     private TeacherDTO newTeacher;
     private TeacherDTO currentTeacher;
+    
+    //Institutions
+    private InstitutionDTO newInstitution;
+    private InstitutionDTO currentInstitution;
 
     public AdministratorManager() {
         newStudent = new StudentDTO();
         newCourse = new CourseDTO();
         newSubject = new SubjectDTO();
+        newInstitution = new InstitutionDTO();
     }
 
     /////////////// STUDENTS /////////////////
@@ -306,7 +318,7 @@ public class AdministratorManager {
         }
         return "admin_teachers_list?faces-redirect=true";
     }
-
+    
     public void removeTeacher(ActionEvent event) {
         try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("teacherUsername");
@@ -319,6 +331,54 @@ public class AdministratorManager {
         }
     }
 
+    public void removeInstitution(ActionEvent event){
+        try {
+            UIParameter param = (UIParameter) event.getComponent().findComponent("teacherUsername");
+            int id = Integer.parseInt(param.getValue().toString());
+            institutionBean.remove(id);
+        } catch(EntityDoesNotExistsException e){
+            FacesExceptionHandler.handleException(e, e.getMessage(), logger);
+        } 
+        catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
+        }
+    }
+    
+    public String updateInstitution() {
+        try {
+            institutionBean.update(
+                    currentInstitution.getCode(),
+                    currentInstitution.getName());
+
+        } catch (EntityDoesNotExistsException | MyConstraintViolationException e) {
+            FacesExceptionHandler.handleException(e, e.getMessage(), logger);
+            return null;
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
+            return null;
+        }
+        return "admin_institution_list?faces-redirect=true";
+    }
+    
+    public List<InstitutionDTO> getAllInstitutions(){
+        try {
+            return institutionBean.getAll();
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
+            return null;
+        }
+    }
+    
+    public void createInstitution(){
+        try {
+            institutionBean.create(newInstitution.getCode(), newInstitution.getName());
+        } catch (EntityAlreadyExistsException | MyConstraintViolationException ex) {
+            FacesExceptionHandler.handleException(ex, ex.getMessage(), component, logger);
+        } catch (Exception e){
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+    }
+    
     /////////////// GETTERS & SETTERS /////////////////    
     public StudentDTO getNewStudent() {
         return newStudent;
@@ -392,6 +452,23 @@ public class AdministratorManager {
         this.currentTeacher = currentTeacher;
     }
 
+    public void setCurrentInstitution(InstitutionDTO currentInstitution) {
+        this.currentInstitution = currentInstitution;
+    }
+
+    public void setNewInstitution(InstitutionDTO newInstitution) {
+        this.newInstitution = newInstitution;
+    }
+
+    public InstitutionDTO getNewInstitution() {
+        return newInstitution;
+    }
+
+    public InstitutionDTO getCurrentInstitution() {
+        return currentInstitution;
+    }
+
+    
     ///////////// VALIDATORS ////////////////////////
     public void validateUsername(FacesContext context, UIComponent toValidate, Object value) {
         try {
