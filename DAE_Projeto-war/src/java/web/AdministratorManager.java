@@ -2,19 +2,23 @@ package web;
 
 import dtos.CourseDTO;
 import dtos.InstitutionDTO;
+import dtos.PropostaDTO;
 import dtos.StudentDTO;
 import dtos.SubjectDTO;
 import dtos.TeacherDTO;
 import ejbs.CourseBean;
 import ejbs.InstitutionBean;
+import ejbs.PropostaBean;
 import ejbs.StudentBean;
 import ejbs.SubjectBean;
 import ejbs.TeacherBean;
+import enums.TipoTrabalho;
 import exceptions.EntityAlreadyExistsException;
 import exceptions.EntityDoesNotExistsException;
 import exceptions.MyConstraintViolationException;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
+
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -38,6 +42,8 @@ public class AdministratorManager {
     private CourseBean courseBean;
     @EJB
     private SubjectBean subjectBean;
+    @EJB
+    private PropostaBean propostaBean;
     
     @EJB
     private InstitutionBean institutionBean;
@@ -50,6 +56,10 @@ public class AdministratorManager {
     private SubjectDTO newSubject;
     private SubjectDTO currentSubject;
     private UIComponent component;
+    
+    //Proposta
+    private PropostaDTO newProposta;
+    private PropostaDTO currentProposta;
     
     // Teacher
     private TeacherDTO newTeacher;
@@ -64,6 +74,8 @@ public class AdministratorManager {
         newCourse = new CourseDTO();
         newSubject = new SubjectDTO();
         newInstitution = new InstitutionDTO();
+        newProposta = new PropostaDTO();
+        
     }
 
     /////////////// STUDENTS /////////////////
@@ -135,6 +147,87 @@ public class AdministratorManager {
             return null;
         }
     }
+    
+    /////////////// PROPOSTAS /////////////////
+    public String createProposta() {
+        try {
+            
+            propostaBean.create(TipoTrabalho.DISSERTACAO,
+                    newProposta.getTitulo(),
+                    newProposta.getAreas_cientificas(),
+                    newProposta.getProponentes(),
+                    newProposta.getResumo(),
+                    newProposta.getObjetivos(),
+                    newProposta.getBibliografia(),
+                    newProposta.getPlano_trabalhos(),
+                    newProposta.getLocal_realizacao(),
+                    newProposta.getRequisitos(),
+                    newProposta.getOrcamento(),
+                    newProposta.getApoios(),
+                    null,
+                    null
+                    );
+            newProposta.reset();
+        } catch (EntityAlreadyExistsException | MyConstraintViolationException e) {
+            FacesExceptionHandler.handleException(e, e.getMessage(), component, logger);
+            return null;
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+            return null;
+        }
+
+        return "admin_proposta_list?faces-redirect=true";
+    }
+
+    public List<PropostaDTO> getAllPropostas() {
+        try {
+            return propostaBean.getAll();
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
+            return null;
+        }
+    }
+
+    public String updateProposta() {
+        try {
+            propostaBean.update(currentProposta.getId(),
+                    currentProposta.getTipoTrabalho(),
+                    currentProposta.getTitulo(),
+                    currentProposta.getAreas_cientificas(),
+                    currentProposta.getProponentes(),
+                    currentProposta.getResumo(),
+                    currentProposta.getObjetivos(),
+                    currentProposta.getBibliografia(),
+                    currentProposta.getPlano_trabalhos(),
+                    currentProposta.getLocal_realizacao(),
+                    currentProposta.getRequisitos(),
+                    currentProposta.getOrcamento(),
+                    currentProposta.getApoios(),
+                    currentProposta.getOrientadores(),
+                    currentProposta.getSupervisor());
+
+        } catch (EntityDoesNotExistsException | MyConstraintViolationException e) {
+            FacesExceptionHandler.handleException(e, e.getMessage(), logger);
+            return null;
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
+            return null;
+        }
+        return "index?faces-redirect=true";
+    }
+
+    public void removeProposta(ActionEvent event) {
+        try {
+            UIParameter param = (UIParameter) event.getComponent().findComponent("propostaId");
+            int id = Integer.parseInt(param.getValue().toString());
+            propostaBean.remove(id);
+        } catch (EntityDoesNotExistsException e) {
+            FacesExceptionHandler.handleException(e, e.getMessage(), logger);
+        } catch (Exception e) {
+            FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
+        }
+    }
+    
 
     /////////////// COURSES /////////////////
     public String createCourse() {
@@ -347,8 +440,8 @@ public class AdministratorManager {
     public String updateInstitution() {
         try {
             institutionBean.update(
-                    currentInstitution.getCode(),
-                    currentInstitution.getName());
+                    getCurrentInstitution().getCode(),
+                    getCurrentInstitution().getName());
 
         } catch (EntityDoesNotExistsException | MyConstraintViolationException e) {
             FacesExceptionHandler.handleException(e, e.getMessage(), logger);
@@ -357,7 +450,7 @@ public class AdministratorManager {
             FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", logger);
             return null;
         }
-        return "admin_institution_list?faces-redirect=true";
+        return "admin_institutions_list?faces-redirect=true";
     }
     
     public List<InstitutionDTO> getAllInstitutions(){
@@ -369,14 +462,19 @@ public class AdministratorManager {
         }
     }
     
-    public void createInstitution(){
+    public String createInstitution(){
         try {
             institutionBean.create(newInstitution.getCode(), newInstitution.getName());
+            
         } catch (EntityAlreadyExistsException | MyConstraintViolationException ex) {
             FacesExceptionHandler.handleException(ex, ex.getMessage(), component, logger);
+            return null;
         } catch (Exception e){
             FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+            return null;
         }
+        return "admin_institutions_list?faces-redirect=true";
+
     }
     
     /////////////// GETTERS & SETTERS /////////////////    
@@ -468,6 +566,21 @@ public class AdministratorManager {
         return currentInstitution;
     }
 
+    public PropostaDTO getNewProposta() {
+        return newProposta;
+    }
+
+    public void setNewProposta(PropostaDTO newProposta) {
+        this.newProposta = newProposta;
+    }
+
+    public PropostaDTO getCurrentProposta() {
+        return currentProposta;
+    }
+
+    public void setCurrentProposta(PropostaDTO currentProposta) {
+        this.currentProposta = currentProposta;
+    }
     
     ///////////// VALIDATORS ////////////////////////
     public void validateUsername(FacesContext context, UIComponent toValidate, Object value) {
@@ -485,4 +598,6 @@ public class AdministratorManager {
             FacesExceptionHandler.handleException(e, "Unkown error.", logger);
         }
     }
+
+    
 }

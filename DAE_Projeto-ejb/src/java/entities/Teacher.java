@@ -12,6 +12,7 @@ import javax.persistence.NamedQuery;
 @NamedQuery(name = "getAllTeachers", query = "SELECT t FROM Teacher t ORDER BY t.name")
 public class Teacher extends User implements Serializable {
     
+    
     @ManyToOne
     private Institution institution;
     

@@ -62,7 +62,7 @@ public class Institution implements Serializable {
     
     @Override
     public String toString() {
-        return "Institution[Name= "+name+" Code=" + code + " ]";
+        return "Institution[Name= "+getName()+" Code=" + getCode() + " ]";
     }
     
     public void addOrientingTeacher(Teacher t){
@@ -101,6 +101,13 @@ public class Institution implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @param code the code to set
+     */
+    public void setCode(int code) {
+        this.code = code;
     }
 
    

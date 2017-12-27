@@ -78,7 +78,7 @@ public class InstitutionBean {
         try {
             Institution institution = em.find(Institution.class, code);
             if (institution == null) {
-                throw new EntityDoesNotExistsException("There is no student with that username.");
+                throw new EntityDoesNotExistsException("There is no institution with that code.");
             }           
             institution.setName(name);            
             em.merge(institution);

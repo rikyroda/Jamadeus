@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:panelGrid columns="2">
+
+            <h:outputLabel for="titulo" value="Titulo: " />
+            <h:outputText 
+                id="titulo"
+                value="#{administratorManager.currentProposta.titulo}"/>
+
+            <h:outputLabel for="areas_cientificas" value="Áreas Científicas: " />
+            <h:outputText 
+                id="areas_cientificas"
+                value="#{administratorManager.currentProposta.areas_cientificas}"/>
+            
+            <h:outputLabel for="resumo" value="Resumo " />
+            <h:outputText 
+                id="resumo"
+                value="#{administratorManager.currentProposta.resumo}"/>
+            
+            <h:outputLabel for="objetivos" value="Objetivos: " />
+            <h:outputText 
+                id="objetivos"
+                value="#{administratorManager.currentProposta.objetivos}"/>
+            
+            <h:outputLabel for="bibliografia" value="Bibliografia: " />
+            <h:outputText 
+                id="bibliografia"
+                value="#{administratorManager.currentProposta.bibliografia}"/>
+            
+            <h:outputLabel for="plano_trabalhos" value="Plano Trabalhos: " />
+            <h:outputText 
+                id="plano_trabalhos"
+                value="#{administratorManager.currentProposta.plano_trabalhos}"/>
+            
+            <h:outputLabel for="local" value="Local Realização: " />
+            <h:outputText 
+                id="local"
+                value="#{administratorManager.currentProposta.local}"/>
+            
+            <h:outputLabel for="requisitos" value="Requisitos: " />
+            <h:outputText 
+                id="requisitos"
+                value="#{administratorManager.currentProposta.requisitos}"/>
+            
+            <h:outputLabel for="orcamento" value="Orçamento: " />
+            <h:outputText 
+                id="orcamento"
+                value="#{administratorManager.currentProposta.orcamento}"/>
+            
+            <h:outputLabel for="apoios" value="Apoios: " />
+            <h:outputText 
+                id="apoios"
+                value="#{administratorManager.currentProposta.apoios}"/>
+
+        </h:panelGrid>
+        
+        <h:link value="Return" outcome="admin_proposta_list"/>
+    </h:body>
+</html>
+
