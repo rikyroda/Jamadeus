@@ -24,10 +24,10 @@ public class TeacherBean {
     @PersistenceContext
     private EntityManager em;
 
-    public void create(String username, String password, String name, String email, String office, int institution_code)
+    public void create(String username, String password, String name, String email, String office, String institution_username)
             throws EntityAlreadyExistsException {
         try {
-            Institution inst = em.find(Institution.class, institution_code);
+            Institution inst = em.find(Institution.class, institution_username);
             if (em.find(User.class, username) != null) {
                 throw new EntityAlreadyExistsException("A user with that username already exists.");
             }

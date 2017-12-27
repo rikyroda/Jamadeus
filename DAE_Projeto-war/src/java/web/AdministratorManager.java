@@ -438,11 +438,9 @@ public class AdministratorManager {
     }
     
     public String updateInstitution() {
+        InstitutionDTO i = currentInstitution;
         try {
-            institutionBean.update(
-                    getCurrentInstitution().getCode(),
-                    getCurrentInstitution().getName());
-
+            institutionBean.update(i.getUsername(),i.getPassword(),i.getName(),i.getEmail(),i.getOrientingTeachers(),i.getSuperviser());
         } catch (EntityDoesNotExistsException | MyConstraintViolationException e) {
             FacesExceptionHandler.handleException(e, e.getMessage(), logger);
             return null;
@@ -463,8 +461,9 @@ public class AdministratorManager {
     }
     
     public String createInstitution(){
-        try {
-            institutionBean.create(newInstitution.getCode(), newInstitution.getName());
+       try {
+           InstitutionDTO i = newInstitution;
+            institutionBean.create(i.getUsername(),i.getPassword(),i.getName(),i.getEmail(),i.getOrientingTeachers(),i.getSuperviser());
             
         } catch (EntityAlreadyExistsException | MyConstraintViolationException ex) {
             FacesExceptionHandler.handleException(ex, ex.getMessage(), component, logger);

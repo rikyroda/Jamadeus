@@ -7,7 +7,7 @@ public class TeacherDTO extends UserDTO implements Serializable {
     private String office;
 
     public TeacherDTO() {
-    }    
+    }
     
     public TeacherDTO(String username, String password, String name, String email, String office) {
         super(username, password, name, email);

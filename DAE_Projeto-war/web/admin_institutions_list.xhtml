@@ -17,12 +17,28 @@
                     <h:outputText value="Institutions" />
                 </f:facet>            
 
-                <p:column headerText="Code">
-                    <h:outputText value="${institution.code}" />
+                <p:column headerText="Username">
+                    <h:outputText value="${institution.username}" />
                 </p:column>
 
                 <p:column headerText="Name">
                     <h:outputText value="${institution.name}" />
+                </p:column>   
+            
+                <p:column headerText="Email">
+                    <h:outputText value="${institution.email}" />
+                </p:column>   
+            
+                <p:column headerText="Email">
+                    <h:outputText value="${institution.email}" />
+                </p:column>   
+            
+                <p:column headerText="Orientadores">
+                    <h:outputText value="${institution.orientingTeachers}" />
+                </p:column>   
+            
+                <p:column headerText="Supervisor">
+                    <h:outputText value="${institution.superviser}" />
                 </p:column>   
 
                 <p:column headerText="Actions">
@@ -36,7 +52,7 @@
                         </h:commandLink>
                         &nbsp;
                         <h:commandLink value="Remove" actionListener="#{administratorManager.removeInstitution}">
-                            <f:param name="institutionCode" id="institutionCode" value="#{institution.code}" />
+                            <f:param name="institutionCode" id="institutionCode" value="#{institution.username}" />
                         </h:commandLink>
                     </h:form>
                 </p:column>        

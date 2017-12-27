@@ -9,24 +9,50 @@
     <h:body>
         <h:form>                  
             <h:panelGrid columns="3">
-
-                <h:outputLabel for="code" value="Code: " />
+                
+                <h:outputLabel for="username" value="Username: " />
                 <h:inputText 
                     id="code"
                     size="20"
                     required="true"
-                    requiredMessage="Error: Code cannot be empty."
-                    value="#{administratorManager.newInstitution.code}"/>
-                <h:message for="code" errorStyle="color: red" />
+                    requiredMessage="Error: Username cannot be empty."
+                    value="#{administratorManager.newInstitution.username}"/>
+                <h:message for="username" errorStyle="color: red" />
+                
+                <h:outputLabel for="password" value="Password: " />
+                <h:inputSecret 
+                    id="password"
+                    required="true"
+                    requiredMessage="Error: Password cannot be empty."
+                    value="#{administratorManager.newInstitution.password}"/>
+                <h:message for="password" errorStyle="color: red" />
 
-                <h:outputLabel for="name" value="Name: " />
+                <h:outputLabel for="email" value="Email: " />
                 <h:inputText 
-                    id="name"
+                    id="email"
                     size="52"
                     required="true"
                     requiredMessage="Error: Name cannot be empty."                            
-                    value="#{administratorManager.newInstitution.name}" />
-                <h:message for="name" errorStyle="color: red" />
+                    value="#{administratorManager.newInstitution.email}" />
+                <h:message for="email" errorStyle="color: red" />
+                
+                <h:outputLabel for="orientingTeachers" value="Orientadores: " />
+                <h:inputText 
+                    id="orientingTeachers"
+                    size="52"
+                    required="true"
+                    requiredMessage="Error: Orienting Teachers cannot be empty."                            
+                    value="#{administratorManager.newInstitution.orientingTeachers}" />
+                <h:message for="orientingTeachers" errorStyle="color: red" />
+                
+                <h:outputLabel for="superviser" value="Supervisor: " />
+                <h:inputText 
+                    id="superviser"
+                    size="52"
+                    required="true"
+                    requiredMessage="Error: Orienting Teachers cannot be empty."                            
+                    value="#{administratorManager.newInstitution.superviser}" />
+                <h:message for="superviser" errorStyle="color: red" />
 
                 <h:commandButton
                     id="submit"

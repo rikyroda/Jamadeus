@@ -54,9 +54,12 @@ public class ConfigBean {
             subjectBean.create(6, "ComplProg", 2, 1, "2015/2016");
             subjectBean.create(7, "PA", 2, 2, "2015/2016");
             
-            institutionBean.create(0, "IPLeiria");
-            institutionBean.create(4, "IST");
-            institutionBean.create(5, "ISEG");
+            teacherBean.create("t1", "t1", "t1", "t1@ipleiria.pt", "O1","ipleiria");
+            teacherBean.create("t2", "t2", "t2", "t2@ipleiria.pt", "O2","iseg");
+            teacherBean.create("t3", "t3", "t3", "t3@ipleiria.pt", "O3","ipleiria");
+            
+            institutionBean.create("ipleiria", "12345","Instituto Politécnico de Leiria","ipl@ipl.com","t1,t2,t3","t1");
+            institutionBean.create("iseg", "12345","Instituto Superior Economia e Gestão","iseg@iseg.com","t1,t2","t2");
             
             studentBean.enrollStudent("1111111", 1);
             studentBean.enrollStudent("1111111", 2);
@@ -68,9 +71,7 @@ public class ConfigBean {
             studentBean.enrollStudent("4444444", 6);
             studentBean.enrollStudent("4444444", 7);
 
-            teacherBean.create("t1", "t1", "t1", "t1@ipleiria.pt", "O1",0);
-            teacherBean.create("t2", "t2", "t2", "t2@ipleiria.pt", "O2",0);
-            teacherBean.create("t3", "t3", "t3", "t3@ipleiria.pt", "O3",4);
+            
 
             administratorBean.create("a1", "a1", "a1", "a1@ipleiria.pt");
             administratorBean.create("a2", "a2", "a2", "a2@ipleiria.pt");

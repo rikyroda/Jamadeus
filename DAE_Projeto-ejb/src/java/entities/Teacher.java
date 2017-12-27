@@ -55,5 +55,11 @@ public class Teacher extends User implements Serializable {
     public void removeSubject(Subject subject) {
         subjects.remove(subject);
     }    
+
+    @Override
+    public String toString() {
+        return username; //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
 }

@@ -6,11 +6,13 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,18 +32,10 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
     @NamedQuery(name = "getAllInstitutions",
     query = "SELECT i FROM Institution i")})
-public class Institution implements Serializable {
+public class Institution extends User implements Serializable {
     
-    @Id
-    @Column(name="CODE")
-    private int code;
-    
-    @Column(name="NAME")
-    @NotNull (message= "Institution name must not be empty")
-    private String name;
-    
-    @OneToMany(mappedBy="institution", cascade = CascadeType.REMOVE)
-    private final List<Teacher> orientingTeachers;
+    @OneToMany(mappedBy="institution", cascade = CascadeType.REMOVE,fetch=FetchType.EAGER)
+    private List<Teacher> orientingTeachers;
 
     @OneToOne(mappedBy="institution")
     private Teacher superviser;
@@ -50,26 +44,27 @@ public class Institution implements Serializable {
         this.orientingTeachers = new LinkedList<>();
     }
 
-    public Institution(int code, String name) {
-        this.code = code;
-        this.name = name;
-        this.orientingTeachers = new LinkedList<>();
-    }
-    
-    public int getCode() {
-        return code;
+    public Institution(String username, 
+            String password,
+            String name,
+            String email,
+            LinkedList<Teacher> orientingTeachers,
+            Teacher superviser) {
+        super(username,password,name,email);
+        this.orientingTeachers = new LinkedList<>(orientingTeachers);
+        this.superviser = superviser;
     }
     
     @Override
     public String toString() {
-        return "Institution[Name= "+getName()+" Code=" + getCode() + " ]";
+        return "Institution[Name= "+getName()+"]";
     }
     
     public void addOrientingTeacher(Teacher t){
         if(t==null)
             return;
         
-        orientingTeachers.add(t);
+        getOrientingTeachers().add(t);
     }
     
     public void removeOrientingTeacher(Teacher t){
@@ -77,7 +72,7 @@ public class Institution implements Serializable {
         if(!orientingTeachers.contains(t))
             return;
         
-        orientingTeachers.remove(t);
+        getOrientingTeachers().remove(t);
     }
     
     /**
@@ -104,14 +99,10 @@ public class Institution implements Serializable {
     }
 
     /**
-     * @param code the code to set
+     * @param orientingTeachers the orientingTeachers to set
      */
-    public void setCode(int code) {
-        this.code = code;
+    public void setOrientingTeachers(List<Teacher> orientingTeachers) {
+        this.orientingTeachers = orientingTeachers;
     }
-
-   
-    
-
-    
+  
 }

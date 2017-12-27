@@ -9,15 +9,30 @@
     <h:body>
         <h:panelGrid columns="2">
 
-            <h:outputLabel for="code" value="Code: " />
+            <h:outputLabel for="username" value="Username: " />
             <h:outputText 
                 id="username"
-                value="#{administratorManager.currentInstitution.code}"/>
+                value="#{administratorManager.currentInstitution.username}"/>
 
             <h:outputLabel for="name" value="Name: " />
             <h:outputText 
                 id="name"
                 value="#{administratorManager.currentInstitution.name}"/>
+            
+            <h:outputLabel for="email" value="Email: " />
+            <h:outputText 
+                id="email"
+                value="#{administratorManager.currentInstitution.email}"/>
+            
+            <h:outputLabel for="orientadores" value="Orientadores: " />
+            <h:outputText 
+                id="orientadores"
+                value="#{administratorManager.currentInstitution.orientingTeachers}"/>
+            
+            <h:outputLabel for="supervisor" value="Supervisor: " />
+            <h:outputText 
+                id="supervisor"
+                value="#{administratorManager.currentInstitution.superviser}"/>
 
         </h:panelGrid>
         
